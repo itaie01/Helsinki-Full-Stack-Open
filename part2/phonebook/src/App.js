@@ -3,12 +3,14 @@ import peopleService from './services/people'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState(0)
   const [searchName, setSearchName] = useState('')
+  const [outputMessage, setOutputMessage] = useState(null)
 
   const getPersons = () => {
     peopleService
@@ -33,6 +35,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber(0)
+          setOutputMessage(`Added ${returnedPerson.name}`)
+          setTimeout(() => {
+            setOutputMessage(null)
+          }, 5000)
         })
     }
     else if ((foundPerson !== undefined) && newNumber !== foundPerson.number) {
@@ -43,6 +49,13 @@ const App = () => {
           .then(returnedPerson => {
             console.log('number modified')
             setPersons(persons.map(person => (person.id !== foundPerson.id) ? person : returnedPerson))
+          })
+          .catch(error => {
+            setOutputMessage(`${foundPerson.name} has already been removed from the server.`)
+            setTimeout(() => {
+              setOutputMessage(null)
+            }, 5000)
+            setPersons(persons.filter(person => person.id !== foundPerson.id))
           })
       }
     }
@@ -70,7 +83,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter searchName={searchName} handleSearchName={handleSearchName}/>
+      <Notification message={outputMessage} />
+      <Filter searchName={searchName} handleSearchName={handleSearchName} />
       <PersonForm state={{newname: newName, newNumber: newNumber}} handleState={{addPerson: addPerson, handleNameChange: handleNameChange, handleNumberChange: handleNumberChange}} />
       <h2>Numbers</h2>
       <Persons persons={getMatches()}/>
