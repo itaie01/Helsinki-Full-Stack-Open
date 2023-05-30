@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import peopleService from './services/people'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -11,26 +11,40 @@ const App = () => {
   const [searchName, setSearchName] = useState('')
 
   const getPersons = () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
+    peopleService
+      .getPeople()
+      .then(storedPeople => setPersons(storedPeople))
   }
 
   useEffect(getPersons, [])
 
   const addPerson = (event) => {
     event.preventDefault()
-
-    if (persons.find(person => person.name === newName) === undefined) {
+    let foundPerson = persons.find(person => person.name === newName)
+    if (foundPerson === undefined) {
       const personObject = {
         name: newName,
         number: newNumber,
         id: persons.length + 1
       }
-      setPersons(persons.concat(personObject))
-      setNewName('')
+      peopleService
+        .createPerson(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber(0)
+        })
+    }
+    else if ((foundPerson !== undefined) && newNumber !== foundPerson.number) {
+      if (window.confirm(`${foundPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
+        const modifiedPerson = { ...foundPerson, number: newNumber}
+        peopleService
+          .modifyNumber(modifiedPerson)
+          .then(returnedPerson => {
+            console.log('number modified')
+            setPersons(persons.map(person => (person.id !== foundPerson.id) ? person : returnedPerson))
+          })
+      }
     }
     else {
       alert(`${newName} is already added to phonebook.`)
@@ -52,7 +66,6 @@ const App = () => {
   const handleSearchName = (event) => {
     setSearchName(event.target.value)
   }
-
 
   return (
     <div>
