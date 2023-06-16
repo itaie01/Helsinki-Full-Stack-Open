@@ -64,6 +64,25 @@ app.delete('/api/phonebook/:id', (request, response) => {
     response.status(204).end()
 })
 
+const generateId = () => {
+    const maxId = phonebook.length > 0
+      ? Math.max(...phonebook.map(n => n.id))
+      : 0
+    return maxId + 1
+  }
+
+app.put('/api/phonebook', (request, response) => {
+    let entry = {
+        id: generateId(),
+        name: request.body.name,
+        number: request.body.number
+    }
+
+    phonebook = phonebook.concat(entry)
+
+    response.json(entry)
+})
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
