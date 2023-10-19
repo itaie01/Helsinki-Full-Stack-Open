@@ -1,16 +1,16 @@
 const express = require('express')
 const app = express()
+
 const moment = require('moment')
 const morgan = require('morgan')
-
-app.use(express.json())
+const cors = require('cors')
 
 morgan.token('body', (req, res) => JSON.stringify(req.body) )
+
+app.use(express.static('build'))
+app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-
-
-
-const PORT = 3001
+app.use(cors())
 
 let phonebook = [
     { 
@@ -108,6 +108,8 @@ app.post('/api/phonebook/', (request, response) => {
 
     response.json(entry)
 })
+
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

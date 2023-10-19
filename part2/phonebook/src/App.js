@@ -64,9 +64,7 @@ const App = () => {
     }
   }
 
-  const getMatches = () => {
-    return persons.filter(person => person.name.toLowerCase().search(searchName.toLowerCase()) !== -1)
-  }
+  const getMatches = persons.filter(person => person.name.toLowerCase().search(searchName.toLowerCase()) !== -1)
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -88,7 +86,7 @@ const App = () => {
       <Filter searchName={searchName} handleSearchName={handleSearchName} />
       <PersonForm state={{newname: newName, newNumber: newNumber}} handleState={{addPerson: addPerson, handleNameChange: handleNameChange, handleNumberChange: handleNumberChange}} />
       <h2>Numbers</h2>
-      <Persons persons={getMatches()}/>
+      <Persons persons={getMatches}/>
       {/* <div>debug: {newName}</div>  render state as text for debugging purposes */}
     </div>
   )

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const serverURL = 'http://localhost:3001/persons'
+const serverURL = 'http://localhost:3001/api/phonebook'
 
 const getPeople = () => {
     const request = axios.get(serverURL)
