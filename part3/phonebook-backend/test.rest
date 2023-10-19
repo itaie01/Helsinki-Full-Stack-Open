@@ -1,0 +1,17 @@
+###
+GET http://localhost:3001/api/phonebook/
+###
+
+### 
+DELETE http://localhost:3001/api/phonebook/4
+###
+
+###
+POST http://localhost:3001/api/phonebook/
+Content-Type: application/json
+
+{
+    "name": "John Dob",
+    "number": "33-987552"
+}
+###
