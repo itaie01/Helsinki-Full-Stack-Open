@@ -1,0 +1,13 @@
+### Add blog
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Hello World",
+    "author": "John Appleseed",
+    "url": "https://dummyapi.io/",
+    "likes": 9000
+}
+
+### Get all blogs
+GET http://localhost:3003/api/blogs
