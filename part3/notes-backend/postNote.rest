@@ -1,0 +1,11 @@
+### Get all notes
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "Ensure that everything still works",
+    "important": true
+}
+
+### Get invalid note
+GET http://localhost:3001/api/notes/124325235

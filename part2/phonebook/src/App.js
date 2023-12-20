@@ -34,11 +34,17 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
-          setNewNumber(0)
+          setNewNumber()
           setOutputMessage(`Added ${returnedPerson.name}`)
           setTimeout(() => {
             setOutputMessage(null)
           }, 5000)
+        })
+        .catch(error => {
+            setTimeout(() => {
+                setOutputMessage(error.response.data.error)
+              }, 5000)
+            console.error(error.response.data.error)
         })
     }
     else if ((foundPerson !== undefined) && newNumber !== foundPerson.number) {
