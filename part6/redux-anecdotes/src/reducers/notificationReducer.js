@@ -7,13 +7,22 @@ const notificationrSlice = createSlice({
     initialState,
     reducers: {
         showNotficiation(state, action) {
-            return JSON.parse(JSON.stringify(action.payload));
+            return action.payload
         },
         removeNotification(state, action) {
             return '';
-        }
+        },
     }
 })
+
+export const setNotification = (message, duration) => {
+    return dispatch => {
+        dispatch(showNotficiation(message))
+        setTimeout(() => {
+            dispatch(removeNotification())
+        }, duration * 1000)
+    }
+}
 
 export const { showNotficiation, removeNotification } = notificationrSlice.actions
 export default notificationrSlice.reducer;
